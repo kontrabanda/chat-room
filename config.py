@@ -1,4 +1,4 @@
 CONFIG = {
-    'serverName': 'python_server',
-    'port': 3451
+    'serverName': 'chat_server',
+    'port': 5525
 }
