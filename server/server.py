@@ -2,8 +2,6 @@ import socket
 from config import CONFIG
 from threading import Thread
 
-BUFFER_SIZE = 1024
-
 
 class Server:
     def __init__(self):
@@ -23,14 +21,14 @@ class Server:
             Thread(target=self.handle_client, args=(client,)).start()
 
     def handle_client(self, client):
-        client.send("Please type your nick")
-        name = client.recv(BUFFER_SIZE).decode("utf8")
+        client.send(bytes("Please type your nick", "utf8"))
+        name = client.recv(CONFIG['bufferSize']).decode("utf8")
         self.clientsCollection[client] = name
         client.send(bytes('Welcome %s!' % name, "utf8"))
         self.broadcast("%s has joined the chat!" % name)
 
         while True:
-            msg = client.recv(BUFFER_SIZE).decode("utf8")
+            msg = client.recv(CONFIG['bufferSize']).decode("utf8")
             if msg != "exit":
                 self.broadcast(msg)
             else:
