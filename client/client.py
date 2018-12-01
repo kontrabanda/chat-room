@@ -9,7 +9,7 @@ class Client:
 
     def connect(self):
         self.socket.connect((CONFIG['serverIP'], CONFIG['port']))
-        Thread(target=self.receive()).start()
+        Thread(target=self.receive).start()
 
     def listen(self):
         txt = ''
