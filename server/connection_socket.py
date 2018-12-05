@@ -1,7 +1,7 @@
 from config import CONFIG
 
 
-class ClientSocket:
+class ConnectionSocket:
     def __init__(self, socket):
         self.socket = socket
 

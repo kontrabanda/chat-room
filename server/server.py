@@ -1,13 +1,13 @@
 import socket
 from config import CONFIG
 from threading import Thread
-from .clients_collection import ClientsCollection
+from .connections_collection import ConnectionsCollection
 
 
 class Server:
     def __init__(self):
         self.socket = socket.socket()
-        self.clientsCollection = ClientsCollection()
+        self.connections_collection = ConnectionsCollection()
 
     def start(self):
         print("Starting server")
@@ -18,7 +18,7 @@ class Server:
         while True:
             socket_client, addr = self.socket.accept()
             print("Got connection from", addr)
-            Thread(target=self.clientsCollection.handle_new_client, args=(socket_client,)).start()
+            Thread(target=self.connections_collection.handle_connection, args=(socket_client,)).start()
 
     def close(self):
         print("Closing server")
