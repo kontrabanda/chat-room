@@ -1,24 +1,22 @@
-from config import CONFIG
+from datetime import datetime
 
 
 class Client:
-    def __init__(self, socket_client):
-        self.nick = ''
-        self.socket_client = socket_client
-
-    def fetch_nick(self):
-        self.send("You're connect to chat server.")
-        self.send("Please type your nick.")
-        self.nick = self.receive()
-        self.send('Welcome %s!' % self.nick)
-        return self.nick
+    def __init__(self, client_socket, nick):
+        self.client_socket = client_socket
+        self.nick = nick
 
     def send(self, msg):
-        self.socket_client.send(bytes(msg, "utf8"))
+        msgTxt = "(" + msg['datetime'] + ") " + msg['nick'] + ": " + msg['content']
+        self.client_socket.send(msgTxt)
 
     def receive(self):
-        return self.socket_client.recv(CONFIG['bufferSize']).decode("utf8")
+        txt = self.client_socket.receive()
+        return {
+            'content': txt,
+            'datetime': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'nick': self.nick
+        }
 
     def close(self):
-        self.send("exit")
-        self.socket_client.close()
+        self.client_socket.close()

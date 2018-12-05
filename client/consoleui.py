@@ -28,17 +28,17 @@ class ConsoleUI:
     def __refresh_screen(self):
         for idx, value in enumerate(self.msgs):
             print(self.term.move(idx))
-            print("                                                       ")
+            print(self.term.clear_eol)
             print(self.term.move(idx))
             print("%s-> : " % idx + value)
         print(self.term.move(BUFFER_SIZE))
-        print('Enter message: ')
-        print("                                                       ")
+        print("Enter message: ")
+        print(self.term.clear_eol)
         print(self.term.move(BUFFER_SIZE + 1))
 
     def user_input(self):
         print(self.term.move(BUFFER_SIZE))
-        print('Enter message: ')
-        print("                                                       ")
+        print("Enter message: ")
+        print(self.term.clear_eol)
         print(self.term.move(BUFFER_SIZE + 1))
         return input()
