@@ -26,7 +26,8 @@ class ConnectionsCollection:
     def __listen(self, client):
         while True:
             msg = client.receive()
-            if msg['content'] != "exit":
+
+            if msg['content'] and msg['content'] != "exit":
                 self.__broadcast(msg)
             else:
                 break

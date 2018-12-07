@@ -11,6 +11,9 @@ class ConnectionSocket:
 
     def receive(self):
         msgBytes = self.socket.recv(CONFIG['bufferSize'])
+        #if not msgBytes:
+            #raise Exception("Client break connection!")
+
         return msgBytes.decode(CONFIG['encoding'])
 
     def close(self):
