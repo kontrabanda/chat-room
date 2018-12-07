@@ -31,14 +31,14 @@ class ConsoleUI:
             print(self.term.clear_eol)
             print(self.term.move(idx))
             print("%s-> : " % idx + value)
-        print(self.term.move(BUFFER_SIZE))
-        print("Enter message: ")
-        print(self.term.clear_eol)
-        print(self.term.move(BUFFER_SIZE + 1))
+        self.__clear_screen()
 
     def user_input(self):
+        self.__clear_screen()
+        return input()
+
+    def __clear_screen(self):
         print(self.term.move(BUFFER_SIZE))
         print("Enter message: ")
         print(self.term.clear_eol)
         print(self.term.move(BUFFER_SIZE + 1))
-        return input()
