@@ -6,11 +6,13 @@ from .consoleui import ConsoleUI
 
 class Client:
     def __init__(self):
+        self.socket_closed = True
         self.socket = socket.socket()
         self.console_ui = ConsoleUI()
 
     def connect(self):
         self.socket.connect((CONFIG['serverIP'], CONFIG['port']))
+        self.socket_closed = False
         Thread(target=self.receive).start()
 
     def listen(self):
@@ -18,14 +20,20 @@ class Client:
 
         while txt != 'exit':
             txt = self.console_ui.user_input()
-            self.socket.send(bytes(txt, "utf8"))
+            if not self.socket_closed:
+                self.socket.send(bytes(txt, "utf8"))
+            else:
+                self.console_ui.display("Connection closed!")
+                break
 
     def receive(self):
         while True:
-            try:
-                msg = self.socket.recv(CONFIG['bufferSize']).decode("utf8")
+            msg = self.socket.recv(CONFIG['bufferSize']).decode("utf8")
+            if msg:
                 self.console_ui.display(msg)
-            except OSError:
+            else:
+                self.close()
+                self.console_ui.display('Server closed!')
                 break
 
     def send(self, msg):
@@ -33,4 +41,5 @@ class Client:
             self.socket.send(bytes(msg, "utf8"))
 
     def close(self):
+        self.socket_closed = True
         self.socket.close()
