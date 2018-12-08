@@ -2,6 +2,7 @@ import socket
 from config import CONFIG
 from threading import Thread
 from .consoleui import ConsoleUI
+import json
 
 
 class Client:
@@ -21,16 +22,22 @@ class Client:
         while txt != 'exit':
             txt = self.console_ui.user_input()
             if not self.socket_closed:
-                self.socket.send(bytes(txt, "utf8"))
+                msg = {
+                    'content': txt
+                }
+
+                self.socket.send(bytes(json.dumps(msg), "utf8"))
             else:
                 self.console_ui.display("Connection closed!")
                 break
 
     def receive(self):
         while True:
-            msg = self.socket.recv(CONFIG['bufferSize']).decode("utf8")
-            if msg:
-                self.console_ui.display(msg)
+            msgTxt = self.socket.recv(CONFIG['bufferSize']).decode("utf8")
+
+            if msgTxt:
+                msg = json.loads(msgTxt)
+                self.console_ui.display(msg['content'])
             else:
                 self.close()
                 self.console_ui.display('Server closed!')

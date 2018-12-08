@@ -1,20 +1,22 @@
 from config import CONFIG
+import json
 
 
 class ConnectionSocket:
     def __init__(self, socket):
         self.socket = socket
 
-    def send(self, msgTxt):
+    def send(self, msg):
+        msgTxt = json.dumps(msg)
         msgBytes = bytes(msgTxt, CONFIG['encoding'])
         self.socket.send(msgBytes)
 
     def receive(self):
         msgBytes = self.socket.recv(CONFIG['bufferSize'])
-        #if not msgBytes:
-            #raise Exception("Client break connection!")
-
-        return msgBytes.decode(CONFIG['encoding'])
+        if not msgBytes:
+            raise ConnectionError('Connection dropped!')
+        msgTxt = msgBytes.decode(CONFIG['encoding'])
+        return json.loads(msgTxt)
 
     def close(self):
         self.socket.close()
