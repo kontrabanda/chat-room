@@ -2,7 +2,7 @@ from config import CONFIG
 import json
 
 
-class ConnectionSocket:
+class ConnectionLowLevel:
     def __init__(self, socket):
         self.socket = socket
 

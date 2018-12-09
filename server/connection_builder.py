@@ -1,10 +1,10 @@
-from .connection import Connection
+from .connection_high_level import ConnectionHighLevel
 from .message_factory import MessageFactory
 
 
 class ConnectionBuilder:
-    def __init__(self, connection_socket):
-        self.__connection = Connection(connection_socket)
+    def __init__(self, connection_low_level):
+        self.__connection = ConnectionHighLevel(connection_low_level)
 
     def add_nick(self):
         self.__send_server_message("You're connect to chat server.")
