@@ -1,6 +1,5 @@
-import json
 from threading import Thread
-from config import CONFIG
+
 from .connection import Connection
 from .consoleui import ConsoleUI
 
@@ -36,7 +35,7 @@ class Client:
         while True:
             try:
                 msg = self.connection.receive()
-                self.console_ui.display(msg['content'])
+                self.console_ui.display_with_color(msg)
             except ConnectionError:
                 self.console_ui.display('Server closed!')
                 self.__close()

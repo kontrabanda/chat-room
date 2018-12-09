@@ -17,6 +17,12 @@ class ConsoleUI:
             msgs.append("")
         return collections.deque(iterable=msgs, maxlen=BUFFER_SIZE)
 
+    def display_with_color(self, msg):
+        msg_with_color = self.term.green + msg['datetime'] + ' ' + \
+                         self.term.blue + '(' + msg['nick'] + '): ' + \
+                         self.term.normal + msg['content']
+        self.display(msg_with_color)
+
     def display(self, msg):
         self.lock.acquire()
 
@@ -39,6 +45,6 @@ class ConsoleUI:
 
     def __clear_screen(self):
         print(self.term.move(BUFFER_SIZE))
-        print("Enter message: ")
+        print(self.term.yellow + "Enter message: " + self.term.normal)
         print(self.term.clear_eol)
         print(self.term.move(BUFFER_SIZE + 1))

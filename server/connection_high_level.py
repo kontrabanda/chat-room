@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 
 class ConnectionHighLevel:
@@ -14,6 +15,7 @@ class ConnectionHighLevel:
         message_txt = self.connection_low_level.receive()
         message = json.loads(message_txt)
         message['nick'] = self.nick
+        message['datetime'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return message
 
     def close(self):
