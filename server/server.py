@@ -18,7 +18,7 @@ class Server:
         while True:
             socket_client, addr = self.socket.accept()
             print("Got connection from", addr)
-            Thread(target=self.connection_listener.listen, args=(socket_client,)).start()
+            Thread(target=self.connection_listener.handle_connection, args=(socket_client,)).start()
 
     def close(self):
         print("Closing server")

@@ -1,35 +1,30 @@
-from .connections_collection import ConnectionsCollection
-from .connection_low_level import ConnectionLowLevel
 from .connection_builder import ConnectionBuilder
+from .connections_collection import ConnectionsCollection
 
 
 class ConnectionListener:
     def __init__(self):
         self.connections = ConnectionsCollection()
 
-    def listen(self, socket):
-        client = self.__create_client(socket)
+    def handle_connection(self, socket):
+        client = ConnectionBuilder.create_connection(socket)
         self.__append(client)
-        self.__listen(client)
+        self.__listen_with_error_handling(client)
         self.__remove(client)
-
-    def __create_client(self, socket):
-        connection_low_level = ConnectionLowLevel(socket)
-        return ConnectionBuilder(connection_low_level) \
-            .add_nick() \
-            .build()
 
     def __append(self, client):
         self.connections.append(client)
         self.connections.broadcast_txt("%s has joined the chat!" % client.nick)
 
+    def __listen_with_error_handling(self, client):
+        try:
+            self.__listen(client)
+        except ConnectionError:
+            print('Broken connection!')
+
     def __listen(self, client):
         while True:
-            try:
-                msg = client.receive()
-            except ConnectionError:
-                break
-
+            msg = client.receive()
             if msg['content'] and msg['content'] != "exit":
                 self.connections.broadcast(msg)
             else:

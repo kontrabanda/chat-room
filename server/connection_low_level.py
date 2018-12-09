@@ -6,17 +6,16 @@ class ConnectionLowLevel:
     def __init__(self, socket):
         self.socket = socket
 
-    def send(self, msg):
-        msgTxt = json.dumps(msg)
-        msgBytes = bytes(msgTxt, CONFIG['encoding'])
-        self.socket.send(msgBytes)
+    def send(self, message_txt):
+        message_bytes = bytes(message_txt, CONFIG['encoding'])
+        self.socket.send(message_bytes)
 
     def receive(self):
-        msgBytes = self.socket.recv(CONFIG['bufferSize'])
-        if not msgBytes:
+        message_bytes = self.socket.recv(CONFIG['bufferSize'])
+        if not message_bytes:
             raise ConnectionError('Connection dropped!')
-        msgTxt = msgBytes.decode(CONFIG['encoding'])
-        return json.loads(msgTxt)
+        message_txt = message_bytes.decode(CONFIG['encoding'])
+        return json.loads(message_txt)
 
     def close(self):
         self.socket.close()

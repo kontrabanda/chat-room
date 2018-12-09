@@ -1,8 +1,16 @@
 from .connection_high_level import ConnectionHighLevel
 from .message_factory import MessageFactory
+from .connection_low_level import ConnectionLowLevel
 
 
 class ConnectionBuilder:
+    @staticmethod
+    def create_connection(socket):
+        connection_low_level = ConnectionLowLevel(socket)
+        return ConnectionBuilder(connection_low_level) \
+            .add_nick() \
+            .build()
+
     def __init__(self, connection_low_level):
         self.__connection = ConnectionHighLevel(connection_low_level)
 
@@ -13,13 +21,13 @@ class ConnectionBuilder:
         self.__send_server_message('Welcome %s!' % self.__connection.nick)
         return self
 
-    def __send_server_message(self, msgTxt):
-        msg = MessageFactory.create_server_message(msgTxt)
-        self.__connection.send(msg)
+    def __send_server_message(self, message_txt):
+        message = MessageFactory.create_server_message(message_txt)
+        self.__connection.send(message)
 
     def __receive_client_nick(self):
-        msg = self.__connection.receive()
-        return msg['content']
+        message = self.__connection.receive()
+        return message['content']
 
     def build(self):
         return self.__connection
