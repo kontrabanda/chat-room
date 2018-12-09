@@ -25,7 +25,7 @@ class ConnectionListener:
     def __listen(self, client):
         while True:
             msg = client.receive()
-            if msg['content'] and msg['content'] != "exit":
+            if msg['content'] != "exit":
                 self.connections.broadcast(msg)
             else:
                 break
