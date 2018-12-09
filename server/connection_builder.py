@@ -15,8 +15,7 @@ class ConnectionBuilder:
         self.__connection = ConnectionHighLevel(connection_low_level)
 
     def add_nick(self):
-        self.__send_server_message("You're connect to chat server.")
-        self.__send_server_message("Please type your nick.")
+        self.__send_server_message("You're connect to chat server. Please type your nick.")
         self.__connection.nick = self.__receive_client_nick()
         self.__send_server_message('Welcome %s!' % self.__connection.nick)
         return self

@@ -1,5 +1,4 @@
 from config import CONFIG
-import json
 
 
 class ConnectionLowLevel:
@@ -14,8 +13,7 @@ class ConnectionLowLevel:
         message_bytes = self.socket.recv(CONFIG['bufferSize'])
         if not message_bytes:
             raise ConnectionError('Connection dropped!')
-        message_txt = message_bytes.decode(CONFIG['encoding'])
-        return json.loads(message_txt)
+        return message_bytes.decode(CONFIG['encoding'])
 
     def close(self):
         self.socket.close()
