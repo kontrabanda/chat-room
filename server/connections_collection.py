@@ -21,7 +21,7 @@ class ConnectionsCollection:
 
     def __append_client(self, client):
         self.elements.append(client)
-        self.__broadcast_from_server("%s has joined the chat!" % client.nick)
+        self.__broadcast_txt("%s has joined the chat!" % client.nick)
 
     def __listen(self, client):
         while True:
@@ -38,9 +38,9 @@ class ConnectionsCollection:
     def __remove_client(self, client):
         client.close()
         self.elements.remove(client)
-        self.__broadcast_from_server("%s has left the chat." % client.nick)
+        self.__broadcast_txt("%s has left the chat." % client.nick)
 
-    def __broadcast_from_server(self, msgTxt):
+    def __broadcast_txt(self, msgTxt):
         msg = MessageFactory.create_server_message(msgTxt)
         self.__broadcast(msg)
 
