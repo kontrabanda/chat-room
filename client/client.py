@@ -37,7 +37,7 @@ class Client:
                 msg = self.connection.receive()
                 self.console_ui.display_with_color(msg)
             except ConnectionError:
-                self.console_ui.display('Server closed!')
+                self.console_ui.display('Connection closed!')
                 self.__close()
                 break
 
